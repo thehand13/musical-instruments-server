@@ -1,15 +1,20 @@
-import { RolesModule } from './../roles/roles.module';
+import { OrdersModule } from './orders/orders.module';
 import { ProductsModule } from './products/products.module';
 import { Module } from '@nestjs/common';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { User } from './users/user.model';
-import { Role } from 'roles/role.model';
-import { UserRoles } from 'roles/user-roles.model';
+import { RolesModule } from './roles/roles.module';
+import { Role } from './roles/role.model';
+import { UserRoles } from './users/user-roles.model';
+import { Product } from './products/product.model';
+import { Order } from './orders/order.model';
+import { OrderProducts } from './orders/order-products.model';
 
 @Module({
   imports: [
+    OrdersModule,
     RolesModule,
     UsersModule,
     ProductsModule,
@@ -23,8 +28,9 @@ import { UserRoles } from 'roles/user-roles.model';
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
-      models: [User, Role, UserRoles],
+      models: [User, Role, UserRoles, Product, Order, OrderProducts],
       autoLoadModels: true,
+      synchronize: true,
     }),
   ],
 })

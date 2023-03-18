@@ -8,7 +8,7 @@ export class CreateUserDto {
     example: 'sdha2ewtygebrg823',
     description: 'User password',
   })
-  readonly password: string;
+  readonly passwordHash: string;
 
   @ApiProperty({ example: 'Roman', description: 'User name' })
   readonly name: string;

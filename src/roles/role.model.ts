@@ -7,7 +7,7 @@ import {
   Table,
 } from 'sequelize-typescript';
 import { User } from 'src/users/user.model';
-import { UserRoles } from './user-roles.model';
+import { UserRoles } from '../users/user-roles.model';
 
 interface RoleCreationAttributes {
   value: string;
@@ -16,7 +16,10 @@ interface RoleCreationAttributes {
 
 @Table({ tableName: 'roles' })
 export class Role extends Model<Role, RoleCreationAttributes> {
-  @ApiProperty({ example: '1', description: 'Role ID' })
+  @ApiProperty({
+    example: '1',
+    description: 'Role ID',
+  })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -25,7 +28,10 @@ export class Role extends Model<Role, RoleCreationAttributes> {
   })
   id: number;
 
-  @ApiProperty({ example: 'admin', description: 'Role title' })
+  @ApiProperty({
+    example: 'admin',
+    description: 'Role title',
+  })
   @Column({
     type: DataType.STRING,
     unique: true,
