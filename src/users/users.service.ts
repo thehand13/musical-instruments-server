@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
+import { ActiveUserData } from 'src/iam/interfaces/active-user-data.interface';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './user.model';
 
@@ -9,11 +10,22 @@ export class UsersService {
 
   async createUser(dto: CreateUserDto) {
     const user = await this.userRepository.create(dto);
-    return user;
+    const userResponse = user;
+    delete user.dataValues.id;
+    return userResponse;
   }
 
-  async getAllUsers() {
-    const users = await this.userRepository.findAll();
+  async getAllUsers(activeUser: ActiveUserData) {
+    const users = await this.userRepository.findAll({
+      attributes: { exclude: ['passwordHash'] },
+    });
     return users;
+  }
+
+  async getUserByEmail(email: string) {
+    const user = await this.userRepository.findOne({
+      where: { email },
+    });
+    return user;
   }
 }

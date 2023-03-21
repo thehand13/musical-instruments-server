@@ -11,5 +11,6 @@ import { Order } from 'src/orders/order.model';
   imports: [SequelizeModule.forFeature([User, Role, UserRoles, Order])],
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

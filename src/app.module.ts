@@ -11,6 +11,7 @@ import { UserRoles } from './users/user-roles.model';
 import { Product } from './products/product.model';
 import { Order } from './orders/order.model';
 import { OrderProducts } from './orders/order-products.model';
+import { IamModule } from './iam/iam.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { OrderProducts } from './orders/order-products.model';
       autoLoadModels: true,
       synchronize: true,
     }),
+    IamModule,
   ],
 })
 export class AppModule {}

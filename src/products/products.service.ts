@@ -15,6 +15,11 @@ export class ProductsService {
     return products;
   }
 
+  async getProductById(id: string) {
+    const order = await this.productRepository.findOne({ where: { id } });
+    return order;
+  }
+
   async createProduct(dto: CreateProductDto) {
     const product = await this.productRepository.create(dto);
     return product;

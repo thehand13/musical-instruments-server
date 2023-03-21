@@ -1,6 +1,7 @@
-import { Body, Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { Controller, Get, HttpStatus } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './dto/create-user.dto';
+import { ActiveUser } from 'src/iam/decorators/active-user.decorator';
+import { ActiveUserData } from 'src/iam/interfaces/active-user-data.interface';
 import { User } from './user.model';
 import { UsersService } from './users.service';
 
@@ -9,17 +10,10 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @ApiOperation({ summary: 'Create new user' })
-  @ApiResponse({ status: HttpStatus.CREATED, type: User })
-  @Post()
-  createUser(@Body() dto: CreateUserDto) {
-    return this.usersService.createUser(dto);
-  }
-
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: HttpStatus.OK, type: [User] })
   @Get()
-  getAllUsers() {
-    return this.usersService.getAllUsers();
+  getAllUsers(@ActiveUser() activeUser: ActiveUserData) {
+    return this.usersService.getAllUsers(activeUser);
   }
 }

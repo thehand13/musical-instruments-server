@@ -14,10 +14,10 @@ import { User } from 'src/users/user.model';
 import { OrderProducts } from './order-products.model';
 
 interface OrderCreationAttributes {
-  userId: number;
   deliveryDate: number;
   deliveryAddress: string;
   productIdList: number[];
+  userId: number;
 }
 
 @Table({ tableName: 'orders' })
