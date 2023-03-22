@@ -9,8 +9,8 @@ export class RolesController {
   constructor(private rolesService: RolesService) {}
 
   @Post()
-  createRole(@Body() dto: CreateRoleDto) {
-    return this.rolesService.createRole(dto);
+  createRole(@Body() createRoleDto: CreateRoleDto) {
+    return this.rolesService.createRole(createRoleDto);
   }
 
   @Get(':value')

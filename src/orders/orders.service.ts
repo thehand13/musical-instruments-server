@@ -23,14 +23,14 @@ export class OrdersService {
     return order;
   }
 
-  async createOrder(dto: CreateOrderDto) {
-    const order = await this.orderRepository.create(dto);
+  async createOrder(createOrderDto: CreateOrderDto) {
+    const order = await this.orderRepository.create(createOrderDto);
     return order;
   }
 
-  async updateOrder(id: string, dto: UpdateOrderDto) {
+  async updateOrder(id: string, updateOrderDto: UpdateOrderDto) {
     const order = await this.orderRepository.update(
-      { ...dto },
+      { ...updateOrderDto },
       { where: { id } },
     );
     return order;

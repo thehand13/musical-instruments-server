@@ -20,14 +20,14 @@ export class ProductsService {
     return order;
   }
 
-  async createProduct(dto: CreateProductDto) {
-    const product = await this.productRepository.create(dto);
+  async createProduct(createProductDto: CreateProductDto) {
+    const product = await this.productRepository.create(createProductDto);
     return product;
   }
 
-  async updateProduct(id: string, dto: UpdateProductDto) {
+  async updateProduct(id: string, updateProductDto: UpdateProductDto) {
     const product = await this.productRepository.update(
-      { ...dto },
+      { ...updateProductDto },
       { where: { id } },
     );
     return product;

@@ -33,22 +33,25 @@ export class ProductsController {
   @ApiResponse({ status: HttpStatus.OK, type: Product })
   @Auth(AuthType.None)
   @Get(':id')
-  getOrderById(@Param('id') id: string) {
+  getProductById(@Param('id') id: string) {
     return this.productsService.getProductById(id);
   }
 
   @ApiOperation({ summary: 'Create product' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Product })
   @Post()
-  createProduct(@Body() dto: CreateProductDto) {
-    return this.productsService.createProduct(dto);
+  createProduct(@Body() createProductDto: CreateProductDto) {
+    return this.productsService.createProduct(createProductDto);
   }
 
   @ApiOperation({ summary: 'Update product' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Product })
   @Patch(':id')
-  updateProduct(@Param('id') id: string, @Body() dto: UpdateProductDto) {
-    return this.productsService.updateProduct(id, dto);
+  updateProduct(
+    @Param('id') id: string,
+    @Body() updateProductDto: UpdateProductDto,
+  ) {
+    return this.productsService.updateProduct(id, updateProductDto);
   }
 
   @ApiOperation({ summary: 'Delete product' })

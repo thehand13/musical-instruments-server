@@ -36,15 +36,15 @@ export class OrdersController {
   @ApiOperation({ summary: 'Create order' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Order })
   @Post()
-  createOrder(@Body() dto: CreateOrderDto) {
-    return this.ordersService.createOrder(dto);
+  createOrder(@Body() createOrderDto: CreateOrderDto) {
+    return this.ordersService.createOrder(createOrderDto);
   }
 
   @ApiOperation({ summary: 'Create order' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Order })
   @Patch(':id')
-  updateOrder(@Param('id') id: string, @Body() dto: UpdateOrderDto) {
-    return this.ordersService.updateOrder(id, dto);
+  updateOrder(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
+    return this.ordersService.updateOrder(id, updateOrderDto);
   }
 
   @ApiOperation({ summary: 'Delete order' })

@@ -8,8 +8,8 @@ import { User } from './user.model';
 export class UsersService {
   constructor(@InjectModel(User) private userRepository: typeof User) {}
 
-  async createUser(dto: CreateUserDto) {
-    const user = await this.userRepository.create(dto);
+  async createUser(createUserDto: CreateUserDto) {
+    const user = await this.userRepository.create(createUserDto);
     const userResponse = user;
     delete user.dataValues.id;
     return userResponse;
