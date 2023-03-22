@@ -40,7 +40,7 @@ export class OrdersController {
     return this.ordersService.createOrder(createOrderDto);
   }
 
-  @ApiOperation({ summary: 'Create order' })
+  @ApiOperation({ summary: 'Update order' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Order })
   @Patch(':id')
   updateOrder(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
