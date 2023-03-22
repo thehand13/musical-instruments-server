@@ -15,7 +15,7 @@ import { Role } from './role.model';
 import { RolesService } from './roles.service';
 
 @ApiTags('Roles')
-@Controller('rolesService')
+@Controller('roles')
 export class RolesController {
   constructor(private rolesService: RolesService) {}
 
