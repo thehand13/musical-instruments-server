@@ -1,11 +1,12 @@
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-
+import { User } from 'src/users/user.model';
 import { UsersService } from 'src/users/users.service';
 import jwtConfig from '../config/jwt.config';
 import { HashingService } from '../hashing/hashing.service';
 import { ActiveUserData } from '../interfaces/active-user-data.interface';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 
@@ -43,6 +44,26 @@ export class AuthenticationService {
     if (!passwordIsRight) {
       throw new UnauthorizedException('Wrong password!');
     }
+    return await this.generateTokens(user);
+  }
+
+  async refreshTokens(refreshTokenDto: RefreshTokenDto) {
+    try {
+      const { sub } = await this.jwtService.verifyAsync<
+        Pick<ActiveUserData, 'sub'>
+      >(refreshTokenDto.refreshToken, {
+        secret: this.jwtConfiguration.secret,
+        audience: this.jwtConfiguration.audiece,
+        issuer: this.jwtConfiguration.issuer,
+      });
+      const user = await this.usersService.getUserById(sub);
+      return this.generateTokens(user);
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
+    }
+  }
+
+  async generateTokens(user: User) {
     const [accessToken, refreshToken] = await Promise.all([
       this.signToken<Partial<ActiveUserData>>(
         user.id,

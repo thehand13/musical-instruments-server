@@ -11,6 +11,7 @@ import { Response } from 'express';
 import { Auth } from '../decorators/authentication.decorator';
 import { AuthType } from '../enums/auth-type.enum';
 import { AuthenticationService } from './authentication.service';
+import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
 
@@ -49,5 +50,13 @@ export class AuthenticationController {
       httpOnly: true,
       sameSite: true,
     });
+  }
+
+  @ApiOperation({ summary: 'Refresh tokens ' })
+  @ApiResponse({ status: HttpStatus.OK })
+  @HttpCode(HttpStatus.OK)
+  @Post('refresh')
+  refreshTokens(@Body() refreshTokenDto: RefreshTokenDto) {
+    return this.authenticationService.refreshTokens(refreshTokenDto);
   }
 }
