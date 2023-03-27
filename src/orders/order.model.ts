@@ -1,22 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 import {
-  BelongsToMany,
   Column,
   DataType,
   Table,
   Model,
   BelongsTo,
   ForeignKey,
+  HasMany,
 } from 'sequelize-typescript';
-import { Product } from 'src/products/product.model';
+
 import { User } from 'src/users/user.model';
 import { OrderProducts } from './order-products.model';
 
 interface OrderCreationAttributes {
   deliveryDate: number;
   deliveryAddress: string;
-  productIdList: number[];
+  orderProducts: OrderProducts[];
   userId: number;
 }
 
@@ -39,7 +39,7 @@ export class Order extends Model<Order, OrderCreationAttributes> {
     description: 'Order delivery date (milliseconds)',
   })
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.BIGINT,
   })
   deliveryDate: number;
 
@@ -52,9 +52,6 @@ export class Order extends Model<Order, OrderCreationAttributes> {
   })
   deliveryAddress: string;
 
-  @BelongsToMany(() => Product, () => OrderProducts)
-  products: Product[];
-
   @ApiProperty({
     example: '1',
     description: 'User ID',
@@ -65,4 +62,7 @@ export class Order extends Model<Order, OrderCreationAttributes> {
 
   @BelongsTo(() => User)
   user: User;
+
+  @HasMany(() => OrderProducts)
+  orderProducts: OrderProducts[];
 }

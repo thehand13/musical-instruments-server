@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
+  BelongsTo,
   Column,
   DataType,
   ForeignKey,
@@ -9,8 +10,17 @@ import {
 import { Product } from 'src/products/product.model';
 import { Order } from './order.model';
 
-@Table({ tableName: 'user_roles', createdAt: false, updatedAt: false })
-export class OrderProducts extends Model<OrderProducts> {
+interface OrderProductsCreationAttributes {
+  productId: number;
+  orderId: number;
+  productQuantity: number;
+}
+
+@Table({ tableName: 'order_products', createdAt: false, updatedAt: false })
+export class OrderProducts extends Model<
+  OrderProducts,
+  OrderProductsCreationAttributes
+> {
   @ApiProperty({ example: '1', description: 'Order product ID' })
   @Column({
     type: DataType.INTEGER,
@@ -20,23 +30,27 @@ export class OrderProducts extends Model<OrderProducts> {
   })
   id: number;
 
-  @ApiProperty({ example: '1', description: 'Order ID' })
+  @ApiProperty({ example: '4', description: 'Product quantity' })
+  @Column({
+    type: DataType.INTEGER,
+  })
+  productQuantity: number;
+
   @ForeignKey(() => Order)
   @Column({
     type: DataType.INTEGER,
   })
   orderId: number;
 
-  @ApiProperty({ example: '1', description: 'Product ID' })
+  @BelongsTo(() => Order)
+  order: Order;
+
   @ForeignKey(() => Product)
   @Column({
     type: DataType.INTEGER,
   })
   productId: number;
 
-  @ApiProperty({ example: '4', description: 'Product quantity' })
-  @Column({
-    type: DataType.INTEGER,
-  })
-  productQuantity: number;
+  @BelongsTo(() => Product)
+  product: Product;
 }

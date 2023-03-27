@@ -1,14 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 
+interface OrderProductsDto {
+  readonly productId: number;
+  readonly productQuantity: number;
+}
+
 export class CreateOrderDto {
   @ApiProperty({
-    example: '1',
-    description: 'User ID',
-  })
-  readonly userId: number; // change to token after adding auth section!!!
-
-  @ApiProperty({
-    example: '3623626326236',
+    example: '1679785631451',
     description: 'Order delivery date (milliseconds)',
   })
   readonly deliveryDate: number;
@@ -20,8 +19,9 @@ export class CreateOrderDto {
   readonly deliveryAddress: string;
 
   @ApiProperty({
-    example: '[ 1, 1, 3, 2, 6 ]',
+    example:
+      '[{ productId: 1, productQuantity: 2 }, { productId: 2, productQuantity: 3 }, { productId: 3, productQuantity: 4 }]',
     description: 'Order products` ID list',
   })
-  readonly productIdList: number[];
+  readonly products: OrderProductsDto[];
 }

@@ -5,12 +5,12 @@ import {
   Get,
   HttpStatus,
   Param,
-  Patch,
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ActiveUser } from 'src/iam/decorators/active-user.decorator';
+import { ActiveUserData } from 'src/iam/interfaces/active-user-data.interface';
 import { CreateOrderDto } from './dto/create-order.dto';
-import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order } from './order.model';
 import { OrdersService } from './orders.service';
 
@@ -30,27 +30,23 @@ export class OrdersController {
   @ApiResponse({ status: HttpStatus.OK, type: Order })
   @Get(':id')
   getOrderById(@Param('id') id: string) {
-    return this.ordersService.getOrderById(id);
+    return this.ordersService.getOrderById(+id);
   }
 
   @ApiOperation({ summary: 'Create order' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Order })
   @Post()
-  createOrder(@Body() createOrderDto: CreateOrderDto) {
-    return this.ordersService.createOrder(createOrderDto);
-  }
-
-  @ApiOperation({ summary: 'Update order' })
-  @ApiResponse({ status: HttpStatus.CREATED, type: Order })
-  @Patch(':id')
-  updateOrder(@Param('id') id: string, @Body() updateOrderDto: UpdateOrderDto) {
-    return this.ordersService.updateOrder(id, updateOrderDto);
+  createOrder(
+    @Body() createOrderDto: CreateOrderDto,
+    @ActiveUser() activeUser: ActiveUserData,
+  ) {
+    return this.ordersService.createOrder(createOrderDto, activeUser.sub);
   }
 
   @ApiOperation({ summary: 'Delete order' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Order })
   @Delete(':id')
-  deleteOrder(@Param('id') id: string) {
-    return this.ordersService.deleteOrder(id);
+  executeOrder(@Param('id') id: string) {
+    return this.ordersService.deleteOrder(+id);
   }
 }

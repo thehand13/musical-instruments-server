@@ -9,6 +9,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/iam/decorators/authentication.decorator';
+import { AuthType } from 'src/iam/enums/auth-type.enum';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './role.model';
@@ -30,9 +32,10 @@ export class RolesController {
   @ApiResponse({ status: HttpStatus.OK, type: Role })
   @Get(':id')
   getRoleById(@Param('id') id: string) {
-    return this.rolesService.getRoleById(id);
+    return this.rolesService.getRoleById(+id);
   }
 
+  @Auth(AuthType.None) //
   @ApiOperation({ summary: 'Create role' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Role })
   @Post()
@@ -43,14 +46,14 @@ export class RolesController {
   @ApiOperation({ summary: 'Update role' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Role })
   @Patch(':id')
-  updateORole(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.rolesService.updateRole(id, updateRoleDto);
+  updateRole(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
+    return this.rolesService.updateRole(+id, updateRoleDto);
   }
 
   @ApiOperation({ summary: 'Delete role' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Role })
   @Delete(':id')
   deleteRole(@Param('id') id: string) {
-    return this.rolesService.deleteRole(id);
+    return this.rolesService.deleteRole(+id);
   }
 }

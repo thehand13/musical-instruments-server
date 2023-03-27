@@ -1,7 +1,6 @@
-import { Controller, Get, HttpStatus } from '@nestjs/common';
+import { Body, Controller, Get, HttpStatus, Param, Post } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ActiveUser } from 'src/iam/decorators/active-user.decorator';
-import { ActiveUserData } from 'src/iam/interfaces/active-user-data.interface';
+import { GiveRoleDto } from './dto/give-role.dto';
 import { User } from './user.model';
 import { UsersService } from './users.service';
 
@@ -13,7 +12,21 @@ export class UsersController {
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: HttpStatus.OK, type: [User] })
   @Get()
-  getAllUsers(@ActiveUser() activeUser: ActiveUserData) {
-    return this.usersService.getAllUsers(activeUser);
+  getAllUsers() {
+    return this.usersService.getAllUsers();
+  }
+
+  @ApiOperation({ summary: 'Get user by ID' })
+  @ApiResponse({ status: HttpStatus.OK, type: User })
+  @Get(':id')
+  getUserById(@Param('id') id: string) {
+    return this.usersService.getUserById(+id);
+  }
+
+  @ApiOperation({ summary: 'Give user a role' })
+  @ApiResponse({ status: HttpStatus.CREATED, type: User })
+  @Post('give-role')
+  giveRole(@Body() giveRoleDto: GiveRoleDto) {
+    return this.usersService.giveRole(giveRoleDto);
   }
 }

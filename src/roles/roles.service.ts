@@ -13,9 +13,9 @@ export class RolesService {
     return roles;
   }
 
-  async getRoleById(id: string) {
-    const role = await this.roleRepository.findOne({ where: { id } });
-    return role;
+  async getRoleById(id: number) {
+    const role = await this.roleRepository.findByPk(id);
+    return role; //
   }
 
   async createRole(createRoleDto: CreateRoleDto) {
@@ -23,7 +23,7 @@ export class RolesService {
     return role;
   }
 
-  async updateRole(id: string, updateRoleDto: UpdateRoleDto) {
+  async updateRole(id: number, updateRoleDto: UpdateRoleDto) {
     const role = await this.roleRepository.update(
       { ...updateRoleDto },
       { where: { id } },
@@ -31,8 +31,13 @@ export class RolesService {
     return role;
   }
 
-  async deleteRole(id: string) {
+  async deleteRole(id: number) {
     const role = await this.roleRepository.destroy({ where: { id } });
+    return role;
+  }
+
+  async getRoleByValue(value: string) {
+    const role = await this.roleRepository.findOne({ where: { value } });
     return role;
   }
 }
