@@ -8,6 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/iam/authorization/decorators/roles.decorator';
 import { ActiveUser } from 'src/iam/decorators/active-user.decorator';
 import { ActiveUserData } from 'src/iam/interfaces/active-user-data.interface';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -21,6 +22,7 @@ export class OrdersController {
 
   @ApiOperation({ summary: 'Get all orders' })
   @ApiResponse({ status: HttpStatus.OK, type: [Order] })
+  @Roles('admin')
   @Get()
   getAllOrders() {
     return this.ordersService.getAllOrders();

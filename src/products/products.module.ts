@@ -5,6 +5,7 @@ import { Product } from './product.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Order } from 'src/orders/order.model';
 import { OrderProducts } from 'src/orders/order-products.model';
+import { IamModule } from 'src/iam/iam.module';
 
 @Module({
   imports: [SequelizeModule.forFeature([Product, Order, OrderProducts])],

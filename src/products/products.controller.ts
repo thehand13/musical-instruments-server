@@ -9,6 +9,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Roles } from 'src/iam/authorization/decorators/roles.decorator';
 import { Auth } from 'src/iam/decorators/authentication.decorator';
 import { AuthType } from 'src/iam/enums/auth-type.enum';
 import { CreateProductDto } from './dto/create-product.dto';
@@ -39,6 +40,7 @@ export class ProductsController {
 
   @ApiOperation({ summary: 'Create product' })
   @ApiResponse({ status: HttpStatus.OK, type: Product })
+  @Roles('admin')
   @Post()
   createProduct(@Body() createProductDto: CreateProductDto) {
     return this.productsService.createProduct(createProductDto);
@@ -46,6 +48,7 @@ export class ProductsController {
 
   @ApiOperation({ summary: 'Update product' })
   @ApiResponse({ status: HttpStatus.OK, type: Product })
+  @Roles('admin')
   @Patch(':id')
   updateProduct(
     @Param('id') id: string,
@@ -56,6 +59,7 @@ export class ProductsController {
 
   @ApiOperation({ summary: 'Delete product' })
   @ApiResponse({ status: HttpStatus.OK })
+  @Roles('admin')
   @Delete(':id')
   deleteProduct(@Param('id') id: string) {
     return this.productsService.deleteProduct(+id);

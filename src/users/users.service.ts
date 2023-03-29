@@ -14,18 +14,21 @@ export class UsersService {
 
   async getAllUsers() {
     const users = await this.userRepository.findAll({
-      include: { all: true },
       attributes: { exclude: ['passwordHash'] },
     });
     return users;
   }
 
   async getUserById(id: number) {
-    const user = await this.userRepository.findByPk(id, {
+    const user = await this.userRepository.findOne({
+      where: { id },
       include: { all: true },
       attributes: { exclude: ['passwordHash'] },
     });
-    return user;
+    if (user) {
+      return user;
+    }
+    throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
   }
 
   async createUser(createUserDto: CreateUserDto) {
@@ -39,6 +42,7 @@ export class UsersService {
   async getUserByEmail(email: string) {
     const user = await this.userRepository.findOne({
       where: { email },
+      include: { all: true },
     });
     return user;
   }

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { HashingService } from './hashing/hashing.service';
 import { BcryptService } from './hashing/bcrypt.service';
 import { AuthenticationController } from './authentication/authentication.controller';
@@ -12,13 +12,14 @@ import { ConfigModule } from '@nestjs/config';
 import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';
+import { RolesGuard } from './authorization/guards/roles.guard';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([User]),
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
-    UsersModule,
+    forwardRef(() => UsersModule),
   ],
   providers: [
     {
@@ -29,9 +30,11 @@ import { AuthenticationGuard } from './authentication/guards/authentication.guar
       provide: APP_GUARD,
       useClass: AuthenticationGuard,
     },
+    { provide: APP_GUARD, useClass: RolesGuard },
     AccessTokenGuard,
     AuthenticationService,
   ],
   controllers: [AuthenticationController],
+  exports: [AuthenticationService, JwtModule],
 })
 export class IamModule {}
