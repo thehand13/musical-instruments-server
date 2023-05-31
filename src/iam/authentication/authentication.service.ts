@@ -9,6 +9,8 @@ import { ActiveUserData } from '../interfaces/active-user-data.interface';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
+import { SetAdminDto } from './dto/set-admin.dto';
+import { RolesService } from 'src/roles/roles.service';
 
 @Injectable()
 export class AuthenticationService {
@@ -18,6 +20,7 @@ export class AuthenticationService {
     private readonly jwtConfiguration: ConfigType<typeof jwtConfig>,
     private readonly hashingService: HashingService,
     private readonly usersService: UsersService,
+    private readonly rolesService: RolesService,
   ) {}
 
   async signUp(signUpDto: SignUpDto) {
@@ -30,6 +33,38 @@ export class AuthenticationService {
     delete userDto.password;
     await this.usersService.createUser(userDto);
     return { message: 'Account was successfully created' };
+  }
+
+  async setAdmin(setAdminDto: SetAdminDto) {
+    if (setAdminDto.setAdminPassword !== process.env.ADMIN_SET_PASSWORD) {
+      throw new UnauthorizedException('Wrong password');
+    }
+    let adminRole = await this.rolesService.getRoleByValue('admin');
+    if (adminRole) {
+      throw new UnauthorizedException('Admin role already exists');
+    }
+    adminRole = await this.rolesService.createRole({
+      value: 'admin',
+      description: 'Can manage shop',
+    });
+    let userRole = await this.rolesService.getRoleByValue('user');
+    if (!userRole) {
+      userRole = await this.rolesService.createRole({
+        value: 'user',
+        description: 'Can buy products',
+      });
+    }
+    const signUpDto = { ...setAdminDto };
+    delete signUpDto.setAdminPassword;
+    console.log(signUpDto);
+    const message = await this.signUp(signUpDto);
+    const user = await this.usersService.getUserByEmail(setAdminDto.email);
+    const admin = await this.usersService.giveRole({
+      roleId: adminRole.id,
+      userId: user.id,
+    });
+    console.log(admin);
+    return message;
   }
 
   async signIn(signInDto: SignInDto) {

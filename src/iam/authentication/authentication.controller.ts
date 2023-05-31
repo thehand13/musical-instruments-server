@@ -14,6 +14,7 @@ import { AuthenticationService } from './authentication.service';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
+import { SetAdminDto } from './dto/set-admin.dto';
 
 @ApiTags('Authentication')
 @Auth(AuthType.None)
@@ -28,6 +29,15 @@ export class AuthenticationController {
   @Post('sign-up')
   signUp(@Body() signUpDto: SignUpDto) {
     return this.authenticationService.signUp(signUpDto);
+  }
+
+  @ApiOperation({ summary: 'Set admin profile' })
+  @ApiResponse({
+    status: HttpStatus.CREATED,
+  })
+  @Post('set-admin')
+  setAdmin(@Body() setAdminDto: SetAdminDto) {
+    return this.authenticationService.setAdmin(setAdminDto);
   }
 
   @ApiOperation({ summary: 'Sign in' })
@@ -52,7 +62,7 @@ export class AuthenticationController {
     });
   }
 
-  @ApiOperation({ summary: 'Refresh tokens ' })
+  @ApiOperation({ summary: 'Refresh tokens' })
   @ApiResponse({ status: HttpStatus.OK })
   @HttpCode(HttpStatus.OK)
   @Post('refresh')

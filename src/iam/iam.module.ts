@@ -13,6 +13,7 @@ import { AccessTokenGuard } from './authentication/guards/access-token.guard';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthenticationGuard } from './authentication/guards/authentication.guard';
 import { RolesGuard } from './authorization/guards/roles.guard';
+import { RolesModule } from 'src/roles/roles.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { RolesGuard } from './authorization/guards/roles.guard';
     JwtModule.registerAsync(jwtConfig.asProvider()),
     ConfigModule.forFeature(jwtConfig),
     forwardRef(() => UsersModule),
+    RolesModule,
   ],
   providers: [
     {
