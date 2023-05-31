@@ -12,6 +12,9 @@ import { Product } from './products/product.model';
 import { Order } from './orders/order.model';
 import { OrderProducts } from './orders/order-products.model';
 import { IamModule } from './iam/iam.module';
+import { FilesModule } from './files/files.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
 
 @Module({
   imports: [
@@ -22,6 +25,7 @@ import { IamModule } from './iam/iam.module';
     ConfigModule.forRoot({
       envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
+    ServeStaticModule.forRoot({ rootPath: path.resolve(__dirname, 'static') }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -34,6 +38,7 @@ import { IamModule } from './iam/iam.module';
       synchronize: true,
     }),
     IamModule,
+    FilesModule,
   ],
 })
 export class AppModule {}

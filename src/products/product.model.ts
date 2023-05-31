@@ -6,6 +6,7 @@ interface ProductCreationAttributes {
   title: string;
   description: string;
   price: number;
+  image: string;
 }
 
 @Table({ tableName: 'products' })
@@ -52,6 +53,15 @@ export class Product extends Model<Product, ProductCreationAttributes> {
     allowNull: false,
   })
   price: number;
+
+  @ApiProperty({
+    example: '46334723754.jpg',
+    description: 'Product image',
+  })
+  @Column({
+    type: DataType.STRING,
+  })
+  image: string;
 
   @HasMany(() => OrderProducts)
   orderProducts: OrderProducts[];

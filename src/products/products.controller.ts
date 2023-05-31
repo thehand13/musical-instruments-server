@@ -7,6 +7,8 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { Roles } from 'src/iam/authorization/decorators/roles.decorator';
@@ -16,6 +18,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './product.model';
 import { ProductsService } from './products.service';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('Products')
 @Controller('products')
@@ -42,8 +45,12 @@ export class ProductsController {
   @ApiResponse({ status: HttpStatus.OK, type: Product })
   @Roles('admin')
   @Post()
-  createProduct(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.createProduct(createProductDto);
+  @UseInterceptors(FileInterceptor('image'))
+  createProduct(
+    @Body() createProductDto: CreateProductDto,
+    @UploadedFile() image: any,
+  ) {
+    return this.productsService.createProduct(createProductDto, image);
   }
 
   @ApiOperation({ summary: 'Update product' })

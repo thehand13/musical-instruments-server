@@ -5,10 +5,13 @@ import { Product } from './product.model';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Order } from 'src/orders/order.model';
 import { OrderProducts } from 'src/orders/order-products.model';
-import { IamModule } from 'src/iam/iam.module';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
-  imports: [SequelizeModule.forFeature([Product, Order, OrderProducts])],
+  imports: [
+    SequelizeModule.forFeature([Product, Order, OrderProducts]),
+    FilesModule,
+  ],
   controllers: [ProductsController],
   providers: [ProductsService],
   exports: [ProductsService],
