@@ -10,4 +10,6 @@ RUN npm install
 
 COPY . .
 
+COPY static static
+
 CMD ["npm","run", "start:dev"]
