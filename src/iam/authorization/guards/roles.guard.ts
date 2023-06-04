@@ -6,10 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
-import {
-  HttpException,
-  UnauthorizedException,
-} from '@nestjs/common/exceptions';
+import { HttpException } from '@nestjs/common/exceptions';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorator';
 import { Role } from 'src/roles/role.model';
@@ -29,17 +26,10 @@ export class RolesGuard implements CanActivate {
       if (!requiredRoles) {
         return true;
       }
-      const req = context.switchToHttp().getRequest();
-      const authHeader = req.headers.authorization;
-      const bearer = authHeader.split(' ')[0];
-      const token = authHeader.split(' ')[1];
-      if (bearer !== 'Bearer' || !token) {
-        throw new UnauthorizedException({
-          message: 'Wrong credentials',
-        });
-      }
+      const request = context.switchToHttp().getRequest();
+      const token = request.cookies.accessToken;
       const user = this.jwtService.verify(token);
-      req.user = user;
+      request.user = user;
       return user.roles.some((role: Role) =>
         requiredRoles.includes(role.value),
       );
