@@ -30,6 +30,7 @@ export class OrdersController {
 
   @ApiOperation({ summary: 'Get order by ID' })
   @ApiResponse({ status: HttpStatus.OK, type: Order })
+  @Roles('admin')
   @Get(':id')
   getOrderById(@Param('id') id: string) {
     return this.ordersService.getOrderById(+id);
@@ -47,6 +48,7 @@ export class OrdersController {
 
   @ApiOperation({ summary: 'Delete order' })
   @ApiResponse({ status: HttpStatus.CREATED, type: Order })
+  @Roles('admin')
   @Delete(':id')
   executeOrder(@Param('id') id: string) {
     return this.ordersService.deleteOrder(+id);
