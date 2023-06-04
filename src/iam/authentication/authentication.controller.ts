@@ -52,12 +52,12 @@ export class AuthenticationController {
       await this.authenticationService.signIn(signInDto);
     response.cookie('accessToken', accessToken, {
       secure: true,
-      httpOnly: true,
+      // httpOnly: true,
       sameSite: true,
     });
     response.cookie('refreshToken', refreshToken, {
       secure: true,
-      httpOnly: true,
+      // httpOnly: true,
       sameSite: true,
     });
   }
