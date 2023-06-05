@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -24,18 +24,33 @@ export class ProductsService {
 
   async createProduct(createProductDto: CreateProductDto, image: any) {
     const fileName = await this.filesService.createFile(image);
-    const product = await this.productRepository.create({
-      ...createProductDto,
+    const price = +createProductDto.price;
+    if (isNaN(price)) {
+      throw new HttpException('Price is not a number', HttpStatus.BAD_REQUEST);
+    }
+    const newProduct = {
+      title: createProductDto.title,
+      description: createProductDto.description,
+      price: +createProductDto.price,
       image: fileName,
-    });
+    };
+    const product = await this.productRepository.create(newProduct);
     return product;
   }
 
   async updateProduct(id: number, updateProductDto: UpdateProductDto) {
-    const product = await this.productRepository.update(
-      { ...updateProductDto },
-      { where: { id } },
-    );
+    const price = +updateProductDto.price;
+    if (isNaN(price)) {
+      throw new HttpException('Price is not a number', HttpStatus.BAD_REQUEST);
+    }
+    const updatedProduct = {
+      title: updateProductDto.title,
+      description: updateProductDto.description,
+      price: +updateProductDto.price,
+    };
+    const product = await this.productRepository.update(updatedProduct, {
+      where: { id },
+    });
     return product;
   }
 
