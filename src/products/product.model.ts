@@ -29,7 +29,6 @@ export class Product extends Model<Product, ProductCreationAttributes> {
   })
   @Column({
     type: DataType.STRING,
-    unique: true,
     allowNull: false,
   })
   title: string;
