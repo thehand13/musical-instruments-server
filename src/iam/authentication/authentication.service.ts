@@ -56,14 +56,12 @@ export class AuthenticationService {
     }
     const signUpDto = { ...setAdminDto };
     delete signUpDto.setAdminPassword;
-    console.log(signUpDto);
     const message = await this.signUp(signUpDto);
     const user = await this.usersService.getUserByEmail(setAdminDto.email);
     const admin = await this.usersService.giveRole({
       roleId: adminRole.id,
       userId: user.id,
     });
-    console.log(admin);
     return message;
   }
 
