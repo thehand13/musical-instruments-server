@@ -14,7 +14,7 @@ export class OrdersService {
 
   async getAllOrders() {
     const orders = await this.orderRepository.findAll({
-      include: { all: true },
+      include: 'orderProducts',
     });
     return orders;
   }
@@ -22,7 +22,7 @@ export class OrdersService {
   async getOrderById(id: number) {
     const order = await this.orderRepository.findOne({
       where: { id },
-      include: { all: true },
+      include: 'orderProducts',
     });
     if (order) {
       return order;
