@@ -4,12 +4,14 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './product.model';
 import { FilesService } from 'src/files/files.service';
+import { OrdersService } from 'src/orders/orders.service';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectModel(Product) private productRepository: typeof Product,
     private filesService: FilesService,
+    private ordersService: OrdersService,
   ) {}
 
   async getAllProducts() {
@@ -55,6 +57,7 @@ export class ProductsService {
   }
 
   async deleteProduct(id: number) {
+    await this.ordersService.deleteProductFromAllOrders(id);
     const product = await this.productRepository.destroy({ where: { id } });
     return product;
   }

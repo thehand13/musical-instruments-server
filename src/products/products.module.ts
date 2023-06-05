@@ -6,11 +6,13 @@ import { SequelizeModule } from '@nestjs/sequelize';
 import { Order } from 'src/orders/order.model';
 import { OrderProducts } from 'src/orders/order-products.model';
 import { FilesModule } from 'src/files/files.module';
+import { OrdersModule } from 'src/orders/orders.module';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([Product, Order, OrderProducts]),
     FilesModule,
+    OrdersModule,
   ],
   controllers: [ProductsController],
   providers: [ProductsService],

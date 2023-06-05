@@ -57,4 +57,9 @@ export class OrdersService {
     await this.orderProductsRepository.destroy({ where: { orderId: id } });
     return order;
   }
+
+  async deleteProductFromAllOrders(id: number) {
+    await this.orderProductsRepository.destroy({ where: { productId: id } });
+    return true;
+  }
 }

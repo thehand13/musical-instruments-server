@@ -9,5 +9,6 @@ import { OrderProducts } from './order-products.model';
   imports: [SequelizeModule.forFeature([Order, OrderProducts])],
   controllers: [OrdersController],
   providers: [OrdersService],
+  exports: [OrdersService],
 })
 export class OrdersModule {}
